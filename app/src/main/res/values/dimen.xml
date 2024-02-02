@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="extra_small">6dp</dimen>
+    <dimen name="small">8dp</dimen>
+    <dimen name="medium10">10dp</dimen>
+    <dimen name="medium">15dp</dimen>
+    <dimen name="medium18">18dp</dimen>
+    <dimen name="large">20dp</dimen>
+    <dimen name="large25">25dp</dimen>
+    <dimen name="extra_large">65dp</dimen>
+
+    <dimen name="place_list_item_card_width">400dp</dimen>
+    <dimen name="place_list_item_card_height">120dp</dimen>
+
+    <dimen name="border_width">4dp</dimen>
+    <dimen name="divider_height">2dp</dimen>
+
+    <dimen name="place_and_detail_image_height">220dp</dimen>
+    <dimen name="place_detail_image_height">350dp</dimen>
+
+</resources>

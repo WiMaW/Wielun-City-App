@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WieluńCityApp</string>
+    <string name="city_name">WIELUŃ</string>
+    <string name="splash_screen_p1">miejsce na ziemi, w którym</string>
+    <string name="splash_screen_p2">zaczęła się II Wojna Światowa</string>
+
+    <string name="app_bar">Warto zobaczyć</string>
+    <string name="back_button">Wstecz</string>
+
+    <string name="lokalization">Lokalizacja</string>
+
+    <string name="history">Historia</string>
+    <string name="art">Sztuka</string>
+    <string name="nature">Natura</string>
+    <string name="shops">Zakupy</string>
+    <string name="entertainment">Rozrywka</string>
+    <string name="food">Jedzenie</string>
+
+
+    <string name="city_hall">Ratusz</string>
+    <string name="city_hall_description">W miejscu tym juz w XIV wieku wzniesiono Bramę Krakowską, która w późniejszym okresie stanowiła podwaliny pod budynek ratusza. W XV lub XVI wieku bramę powiększono o jedną kondygnację. Sam ratusz połączony z bramą wybudowano w 1842 roku i od tego czasu jest on siedzibą władz miejskich.</string>
+    <string name="city_hall_localization">Pl. Kazimierza Wielkiego 1</string>
+
+
+    <string name="city_square">Rynek Główny</string>
+    <string name="city_square_description">Centralny plac w kształcie prostokąta. Obecna jego zabudowa pochodzi z końca XIX wieku. W centralnym miejscu rynku zlokalizowana jest fontanna. Przy rynku znajdują się liczne lokalne sklepy oraz restauracja. W okresie letnio-wiosennym na placu rozstawiany jest bar.</string>
+    <string name="city_square_localization">Pl. Legionów 1</string>
+
+
+    <string name="former_castle">Budynek byłego zamku</string>
+    <string name="former_castle_description">Drewniany zamek zlokalizowany był w tym miejscu za czasów panowania króla Kazimierza Wielkiego. Został on zniszczony podczas pożaru w roku 1791. W 1843 roku w dolnych partiach murów zamkowych wzniesiono nowy, neoklasycystyczny pałac. Dziś mieści się tu siedziba wieluńskiego Starostwa Powiatowego.</string>
+    <string name="former_castle_localization">Pl. Kazimierza Wielkiego 2</string>
+
+    <string name="eternal_love_statue">Pomnik Wieczna Miłość</string>
+    <string name="eternal_love_statue_description">Pomnik "Wiczna Miłość" autorstwa wieluńskiego artysty Wojciecha Siudmaka został odsłonięty w dniu 31 sierpnia 2013 roku - w dzień poprzedzający 74 rocznicę wybuchu II Wojny Światowej. Praca ukazuje dwie twarze: kobietę i mężczyznę jako dwie zawieszone w przestrzeni planety, które łączą się na swoich orbitach, tworząc znak nieskończoności.</string>
+    <string name="eternal_love_statue_localization">Park im. Żwirki i Wigury</string>
+
+
+    <string name="saint_michael_church">Kościół św. Michała Archanioła</string>
+    <string name="saint_michael_church_description">Jedna z pierwszych świątyń wieluńskich, zbudowana około XIII-XIV wieku. Została zniszczona podczas II wojny światowej, wiosną 1940 roku.</string>
+    <string name="saint_michael_church_localization">ul. Królewska 1</string>
+
+    <string name="defensive_walls">Mury obronne</string>
+    <string name="defensive_walls_description">Wieluńskie mury obronne powstały po pożarze miasta w 1335 roku, zastępując stopniowo starsze obwarowania drewniano–ziemne. Mury obronne Wielunia miały długość około 1200–1300 metrów i zajmowały obszar około 12 ha, dodatkowo otaczała je fosa. Zbiegały się tam dwie główne ulice miasta, tworząc wrzeciono z rynkiem pośrodku.</string>
+    <string name="defensive_walls_localization">ul. Podwale</string>
+
+
+    <string name="city_park">Park Miejski im. Żwirki i Wigury</string>
+    <string name="city_park_description">Park śródmiejski, którego urządzanie zakończono w roku 1895. Obecną nazwę nadano mu w roku 1933. W latach okupacji Niemieckiej, po wybuchu drugiej wojny światowej, wstęp do niego mieli wyłącznie Niemcy. Na terenie parku rośnie wiele okazałych drzew między innymi klony, buki, dęby, kasztanowce, jesiony, lipy i brzozy.</string>
+    <string name="city_park_localization">Pl. Kazimierza Wielkiego 2</string>
+
+
+    <string name="museum">Muzeum</string>
+    <string name="museum_description">Muzeum mieści się w dawnym klasztorze sióstr bernardynek. Posiada różnorodne zbiory archeologiczne, historyczne i etnograficzne.</string>
+    <string name="museum_localization">ul. Narutowicza 13</string>
+
+
+    <string name="kaliska_street">ulica Kaliska</string>
+    <string name="kaliska_street_description">Ulica Kaliska kiedyś znana jako centrum zakupowe Wielunia od kilku lat traci na znaczeniu w związku z powstawaniem w mieście centrów handlowych. Nadal jednak znajdują się tam małe lokalne sklepy głównie z odzieżą i obuwiem, księgarnia oraz restauracja. </string>
+    <string name="kaliska_street_localization">ul. Kaliska</string>
+
+
+    <string name="kaliska_gate">Brama Kaliska</string>
+    <string name="kaliska_gate_description">Brama zbudowana została w połowie XIV wieku przy wyjeździe z miasta w kierunku Kalisza.  W okresie rządów pruskich (1793 – 1807) została rozebrana do fundamentów. </string>
+    <string name="kaliska_gate_localization">Nowy Rynek 6</string>
+
+
+    <string name="library">Biblioteka</string>
+    <string name="library_description">Biblioteka w Wieluniu działa od roku 1945 (od 1946 roku w obecnym miejscu). W latach 2007 do 2009 dokonano znacznej modernizacji budynku. Biblioteka oferuje bogaty systematycznie aktualizowany księgozbiór, dostęp do audiobooków oraz internetu, organizuje także wydarzenia kulturalno-edukacyjne.</string>
+    <string name="library_localization">ul. Narutowicza 4</string>
+
+
+    <string name="cinema">Kino/Teatr Syrena</string>
+    <string name="cinema_description">Kino zostało zbudowane w latach 1959–1962. Budynek mógł pomieścić 578 widzów. W latach 90-tych kino przestało działać. W 2010 roku rozpoczęto generalny remont, a w październiku 2017 roku kino zostało ponownie otwarte. W kinie działają dwie sale - duża oraz kamerlana (wyposażona w wygodne kanapy). Odbywają się tu seanse filmowe, koncerty, wystawiane są sztuki teatralne.</string>
+    <string name="cinema_localization">ul. Narutowicza 2</string>
+
+    <string name="park">Park im. Mieczysława Kałuży</string>
+    <string name="park_description">Park położony jest przy granicy miasta. Na jego terenie znajduje się ogród botaniczny, stadion miejski, skatepark, dwa boiska do piłki nożnej, plac zabaw i restauracja. W pobliżu biegnie trasa rowerowa szlakiem dawnej kolejki. Wspaniałe miejsce do spędzenia wolnego czasu na świeżym powietrzy z całą rodziną. </string>
+    <string name="park_localization">ul. Wojska Polskiego</string>
+
+
+    <string name="jewish_cemetery">Cmentarz żydowski</string>
+    <string name="jewish_cemetery_description">Powstały w pierwszej połowie XIX wieku cmentarz zlokalizowany został na przedmieściach Wielunia. Podczas II Wojny Światowej odbywały się na nim masowe egzekucje polaków i żydów. Cmentarz został zdemolowany przez armię niemiecką, a uzyskane w ten sposób kamienie nagorbne posłużyły do wyłożenia dróg i basenu kąpielowego. Po wojnie na terenie posadzono drzewa, a w 1980 r. ustawiono kamień upamiętniający ofiary. </string>
+    <string name="jewish_cemetery_localization">ul. Kijak</string>
+
+</resources>

@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">WielunCity</string>
+    <string name="city_name" translatable="false">WIELUN</string>
+    <string name="splash_screen_p1">the place on earth</string>
+    <string name="splash_screen_p2">where World War II started</string>
+
+    <string name="app_bar">Places to visit</string>
+    <string name="back_button">Back button</string>
+
+    <string name="lokalization">Lokalization</string>
+
+    <string name="history">History</string>
+    <string name="art">Art</string>
+    <string name="nature">Nature</string>
+    <string name="shops">Shops</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="food">Food</string>
+
+    <string name="city_hall">City Hall</string>
+    <string name="city_hall_description">The Cracow Gate which is the part of City Hall was built in 14th century. In XV or XVI century the gate was expanded by one storey. In 1842 the city hall connected to the gate was built and since then it has been the seat of the city authorities.</string>
+    <string name="city_hall_localization">1 Kazimierz Wielki Square</string>
+
+
+    <string name="city_square">City Square</string>
+    <string name="city_square_description">There are numerous local shops and a restaurant at the market square. During the spring and summer months a bar works here. It\'s current buildings are dated back to the end of the 19th century. In the central place of the square the fountain is placed. </string>
+    <string name="city_square_localization">1 Legionów Square</string>
+
+
+    <string name="former_castle">Former Castle</string>
+    <string name="former_castle_description">In this place during the times of Kazimierz Wielki (king of Poland) there was a wooden stronghold. It was destroyed during fire in 1791. In 1843 there were built a new neoclassical palace on the lower parts of the castle walls. Today it is the seat of the Wieluń district authorities.</string>
+    <string name="former_castle_localization">2 Kazimierz Wielki Square</string>
+
+
+    <string name="eternal_love_statue">Eternal Love Statue</string>
+    <string name="eternal_love_statue_description">The monument "Eternal Love" by Wojciech Siudmak was unveiled on the eve of the 74th anniversary of the outbreak of World War II on August 31, 2013. The work shows two faces: a woman and a man like two planets suspended in space, which connect in their orbits to form the infinity sign.</string>
+    <string name="eternal_love_statue_localization">City Park "Żwirki i Wigury"</string>
+
+
+    <string name="saint_michael_church">St. Michael the Archangel Church</string>
+    <string name="saint_michael_church_description">Church dedicated to Saint Michael the Archangel. One of the first Wielun templates, build around 13–14th centuries. It was destroyed during Word War II in the spring of 1940.</string>
+    <string name="saint_michael_church_localization">1 Królewska Street</string>
+
+
+    <string name="defensive_walls">Defensive Walls</string>
+    <string name="defensive_walls_description">The Wieluń fortifications were built after the city fire in 1335, gradually replacing the older wooden and earth fortifications. Wieluń\'s defensive walls were approximately 1,200–1,300 meters long and covered an area of approximately 12 ha. The two main streets of the city converged there, forming a spindle with a market square in the middle. The walls were additionally surrounded by a moat.</string>
+    <string name="defensive_walls_localization">Podwale Street</string>
+
+
+    <string name="city_park">City Park \'Zwirki i Wigury\'</string>
+    <string name="city_park_description">A downtown park, the arrangement of which was completed in 1895. It was given it\'s current name in 1933. During the years of German occupation, after the outbreak of World War II, only Germans were allowed to enter it. There are many impressive trees in the park including maples, beeches, oaks, chestnut trees, ash trees, linden trees and birches.</string>
+    <string name="city_park_localization">2 Kazimierz Wielki Square</string>
+
+
+    <string name="museum">Museum</string>
+    <string name="museum_description">The museum is located in the former convent of the Bernardine nuns. It has various archaeological, historical and ethnographic collections.</string>
+    <string name="museum_localization">13 Narutowicza Street</string>
+
+
+    <string name="kaliska_street">Kaliska Street</string>
+    <string name="kaliska_street_description">Kaliska Street, once known as the shopping center of Wieluń, has been losing it\'s importance for several years due to the construction of shopping centers in the city. However, there are still small local shops, mainly selling clothes and shoes, a restaurant and local bookshop.</string>
+    <string name="kaliska_street_localization">Kaliska Street</string>
+
+
+    <string name="kaliska_gate">Kaliska Gate</string>
+    <string name="kaliska_gate_description">The gate was built in the mid–14th century at the exit from the city towards Kalisz. During the Prussian rule (1793 – 1807) it was demolished to it\'s foundations.</string>
+    <string name="kaliska_gate_localization">6 Nowy Rynek</string>
+
+
+    <string name="library">Library</string>
+    <string name="library_description">The library in Wieluń has been operating since 1945 (in it\'s current location since 1946). In the years 2007 to 2009, the building was significantly modernized. The library offers a rich, regularly updated book collection, access to audiobooks and the Internet, and also organizes cultural and educational events.</string>
+    <string name="library_localization">4 Narutowicz Street</string>
+
+
+    <string name="cinema">Cinema/Theater Syrena</string>
+    <string name="cinema_description">The cinema was built in 1959–1962. There was a space for 578 people. In the 90’s the cinema stopped operating. A general renovation was carried out in 2010, and in October 2017, the cinema reopened.There are two cinema halls in the building - a large one and a chamber room (equipped with comfortable sofas). Film screenings, concerts and theater plays take place here.</string>
+    <string name="cinema_localization">2 Narutowicz Street</string>
+
+    <string name="park">City Park \'Mieczysław Kaluza\'</string>
+    <string name="park_description">The park is located on the border of the city. Within it there is a botanical garden, a city stadium, a skate park, two football fields, a playground and a restaurant. There is a bicycle route nearby, following the former railway route. A great place to spend free time outdoors with the whole family.</string>
+    <string name="park_localization">Wojska Polskiego Street</string>
+
+    <string name="jewish_cemetery">Jewish Cemetery</string>
+    <string name="jewish_cemetery_description">The cemetery, established in the first half of the 19th century, was located on the suburbs of Wieluń. During World War II, mass executions of Poles and Jews took place there. The cemetery was demolished by the German army, and the tombstones obtained in this way were used to pave roads and a swimming pool. After the war, trees were planted in the area, and in 1980, a stone was placed to commemorate the victims.</string>
+    <string name="jewish_cemetery_localization">Kijak Street</string>
+
+</resources>
