@@ -63,8 +63,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat.startActivity
 import com.wioletamwrobel.wieluncityapp.R
+import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
 import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
@@ -98,8 +100,7 @@ fun WielunCityApp(
                 viewModel.navigateToListPage()
             },
             onScannerButtonClick = {
-
-
+                viewModel.navigateToDialog()
             },
             isShowingListPage = uiState.value.isShowingListPage,
             selectedPlace = uiState.value.currentPlace,
@@ -150,6 +151,15 @@ fun WielunCityApp(
                 }
             }
         }
+    }
+    if (uiState.value.isScannerButtonClicked) {
+        Dialog.CreateDialog(
+            icon = {Icon(Icons.Filled.Search, "search_icon")},
+            title = "Search for Place",
+            dialogText = "make sure that your device has internet connection",
+            onConfirmButtonClicked = {},
+            onDismissButtonClicked = {viewModel.navigateFromDialog()}
+        )
     }
 }
 
@@ -467,10 +477,6 @@ fun PlaceListAndDetail(
                 context = context
             )
         }
-    }
-
-    fun AlertDialogForSearchingBeacon() {
-
     }
 }
 

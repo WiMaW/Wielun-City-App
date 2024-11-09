@@ -52,6 +52,22 @@ class MyBeautifulCityViewModel : ViewModel() {
 //        }
     }
 
+    fun navigateToDialog() {
+//        viewModelScope.launch {
+        _uiState.update {
+            it.copy(isScannerButtonClicked = true)
+        }
+//        }
+    }
+
+    fun navigateFromDialog() {
+//        viewModelScope.launch {
+        _uiState.update {
+            it.copy(isScannerButtonClicked = false)
+        }
+//        }
+    }
+
     //beacon searching and updating current place to display detail paige
     private val beaconService = BeaconService()
     private var foundedBeacon: String = ""
@@ -118,6 +134,7 @@ class MyBeautifulCityViewModel : ViewModel() {
         val placesList: List<Place> = emptyList(),
         val currentPlace: Place = PlacesDataSource.defaultPlace,
         val isShowingListPage: Boolean = true,
+        val isScannerButtonClicked: Boolean = false,
         val isBeaconScanned: Boolean = false,
     )
 }

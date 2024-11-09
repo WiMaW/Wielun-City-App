@@ -1,0 +1,56 @@
+package com.wioletamwrobel.wieluncityapp.model
+
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+
+object Dialog {
+
+    @Composable
+    fun CreateDialog(
+        icon: @Composable () -> Unit,
+        title: String,
+        dialogText: String,
+        onConfirmButtonClicked: () -> Unit,
+        onDismissButtonClicked: () -> Unit,
+    ) {
+        AlertDialog(
+            icon = icon,
+            title = {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            text = {
+                Text(
+                    text = dialogText,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                },
+            onDismissRequest = onDismissButtonClicked,
+            confirmButton = {
+                TextButton(
+                    onClick = onConfirmButtonClicked
+                ) {
+                    Text(
+                        "Search",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = onDismissButtonClicked
+                ) {
+                    Text(
+                       "Cancel",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        )
+    }
+}

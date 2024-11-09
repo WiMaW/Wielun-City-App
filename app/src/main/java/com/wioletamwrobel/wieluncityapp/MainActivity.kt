@@ -179,7 +179,6 @@ class MainActivity : ComponentActivity() {
                     windowSize = windowSize.widthSizeClass,
                     prefs = prefs,
                     context = context,
-                    activity = this@MainActivity,
                     viewModel = viewModel,
                     uiState = uiState
                 )
