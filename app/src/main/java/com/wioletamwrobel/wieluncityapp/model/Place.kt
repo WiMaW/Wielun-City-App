@@ -10,7 +10,8 @@ data class Place(
     @DrawableRes val placeImageResource: Int,
     @DrawableRes val placeImageResourceSmall: Int,
     @StringRes val placeCategory: Int,
-    val geolocation: String
+    val geolocation: String,
+    val beaconMac: String?
 )
 
 

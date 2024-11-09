@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -25,6 +24,8 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +42,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel
+import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityApp
 import com.wioletamwrobel.wieluncityapp.ui.theme.WielunCityAppTheme
 import kotlinx.coroutines.delay
@@ -51,14 +54,20 @@ class MainActivity : ComponentActivity() {
         applicationContext.getSharedPreferences("prefs", MODE_PRIVATE)
     }
 
+    private val viewModel = MyBeautifulCityViewModel()
+    private lateinit var uiState: State<MyBeautifulCityUiState>
+
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             WielunCityAppTheme {
+                uiState = viewModel.uiState.collectAsState()
                 Surface {
                     val windowSize = calculateWindowSizeClass(activity = this)
                     val context = LocalContext.current
+//                    viewModel.findBeacon(this, this)
                     Navigation(
                         windowSize = windowSize,
                         onBackPressed = { finish() },
@@ -169,7 +178,10 @@ class MainActivity : ComponentActivity() {
                     onBackPressed = onBackPressed,
                     windowSize = windowSize.widthSizeClass,
                     prefs = prefs,
-                    context = context
+                    context = context,
+                    activity = this@MainActivity,
+                    viewModel = viewModel,
+                    uiState = uiState
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.wioletamwrobel.wieluncityapp.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,8 +30,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -44,8 +49,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,14 +64,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Place
+import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
 import com.wioletamwrobel.wieluncityapp.utilis.PlacesContentType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 //main function responsible for displaying main screen of the app depending of window size
 @Composable
@@ -75,46 +82,48 @@ fun WielunCityApp(
     onBackPressed: () -> Unit,
     windowSize: WindowWidthSizeClass,
     context: Context,
-    prefs: SharedPreferences
+    prefs: SharedPreferences,
+    viewModel: MyBeautifulCityViewModel,
+    uiState: State<MyBeautifulCityUiState>
 ) {
-    val viewModel: MyBeautifulCityViewModel = viewModel()
-    val uiState by viewModel.uiState.collectAsState()
     val contentType = when (windowSize) {
         WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> PlacesContentType.LIST_ONLY
         WindowWidthSizeClass.Expanded -> PlacesContentType.LIST_AND_DETAIL
         else -> PlacesContentType.LIST_ONLY
     }
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                onBackButtonClick = { viewModel.navigateToListPage() },
-                isShowingListPage = uiState.isShowingListPage,
-                selectedPlace = uiState.currentPlace,
-                windowSize = windowSize
-            )
-        }
-    ) { innerPadding ->
+    Scaffold(topBar = {
+        AppBar(
+            onBackButtonClick = {
+                viewModel.navigateToListPage()
+            },
+            onScannerButtonClick = {
+
+
+            },
+            isShowingListPage = uiState.value.isShowingListPage,
+            selectedPlace = uiState.value.currentPlace,
+            windowSize = windowSize,
+            uiState = uiState,
+        )
+    }) { innerPadding ->
         if (contentType == PlacesContentType.LIST_AND_DETAIL) {
             PlaceListAndDetail(
-                places = uiState.placesList,
+                places = uiState.value.placesList,
                 onClick = { viewModel.updateCurrentPlace(it) },
-                selectedPlace = uiState.currentPlace,
+                selectedPlace = uiState.value.currentPlace,
                 contentPadding = innerPadding,
                 onBackPressed = onBackPressed,
                 prefs = prefs,
-                context = context
+                context = context,
             )
         } else {
-            if (uiState.isShowingListPage) {
+            if (uiState.value.isShowingListPage && !uiState.value.isBeaconScanned) {
                 PlaceListLazyColumn(
-                    places = uiState.placesList,
-                    onClick = {
+                    places = uiState.value.placesList, onClick = {
                         viewModel.updateCurrentPlace(it)
                         viewModel.navigateToDetailPage()
-                    },
-                    contentPadding = innerPadding,
-                    prefs = prefs
+                    }, contentPadding = innerPadding, prefs = prefs
                 )
             } else {
                 Box(
@@ -128,8 +137,10 @@ fun WielunCityApp(
                         )
                 ) {
                     PlaceDetail(
-                        selectedPlace = uiState.currentPlace,
-                        onBackPressed = { viewModel.navigateToListPage() },
+                        selectedPlace = uiState.value.currentPlace,
+                        onBackPressed = {
+                            viewModel.navigateToListPage()
+                        },
                         contentPadding = innerPadding,
                         modifier = Modifier,
                         imageHeight = dimensionResource(id = R.dimen.place_detail_image_height),
@@ -147,28 +158,28 @@ fun WielunCityApp(
 @Composable
 fun AppBar(
     onBackButtonClick: () -> Unit,
+    onScannerButtonClick: () -> Unit,
     isShowingListPage: Boolean,
     selectedPlace: Place,
     windowSize: WindowWidthSizeClass,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    uiState: State<MyBeautifulCityUiState>,
 ) {
     val isShowingDetailPage = windowSize != WindowWidthSizeClass.Expanded && !isShowingListPage
 
-    TopAppBar(
-        title = {
-            Text(
-                text =
-                if (isShowingDetailPage) stringResource(id = selectedPlace.placeCategory)
-                else stringResource(R.string.app_bar),
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.secondary
-            )
-        },
-        navigationIcon = if (isShowingDetailPage) {
+    TopAppBar(title = {
+        Text(
+            text = if (isShowingDetailPage) stringResource(id = selectedPlace.placeCategory)
+            else stringResource(R.string.app_bar),
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
+    },
+        navigationIcon = if (isShowingDetailPage || uiState.value.isBeaconScanned) {
             {
                 IconButton(onClick = onBackButtonClick) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button),
                         tint = MaterialTheme.colorScheme.outline
                     )
@@ -176,13 +187,18 @@ fun AppBar(
             }
         } else {
             {
-                Box {}
+                IconButton(onClick = onScannerButtonClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Scanner Icon",
+                        tint = MaterialTheme.colorScheme.outline
+                    )
+                }
             }
         },
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
-            .padding(start = dimensionResource(id = R.dimen.medium10))
-    )
+            .padding(start = dimensionResource(id = R.dimen.medium10)))
 }
 
 //UI for item in lazyColumn list with places to visit
@@ -192,8 +208,7 @@ fun PlaceListItem(
     place: Place,
     onClick: (Place) -> Unit,
 ) {
-    Card(
-        elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.extra_small)),
+    Card(elevation = CardDefaults.cardElevation(dimensionResource(id = R.dimen.extra_small)),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
         shape = Shapes.large,
         modifier = Modifier
@@ -206,8 +221,7 @@ fun PlaceListItem(
                 color = MaterialTheme.colorScheme.primary,
                 Shapes.large
             ),
-        onClick = { onClick(place) }
-    ) {
+        onClick = { onClick(place) }) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -242,9 +256,7 @@ fun PlaceListItem(
                 )
             }
             PlaceImageListItem(
-                place = place,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.weight(1f)
+                place = place, contentScale = ContentScale.Crop, modifier = Modifier.weight(1f)
             )
         }
     }
@@ -253,9 +265,7 @@ fun PlaceListItem(
 //Function for blackAndWhite image in placeList lazyColumn
 @Composable
 fun PlaceImageListItem(
-    place: Place,
-    contentScale: ContentScale,
-    modifier: Modifier = Modifier
+    place: Place, contentScale: ContentScale, modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
         Image(
@@ -274,19 +284,16 @@ fun PlaceListLazyColumn(
     places: List<Place>,
     prefs: SharedPreferences,
     onClick: (Place) -> Unit,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     val scrollPosition = prefs.getInt("scroll_position", 0)
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = scrollPosition)
+
     LaunchedEffect(key1 = lazyListState) {
         snapshotFlow {
             lazyListState.firstVisibleItemIndex
-        }
-            .debounce(400L)
-            .collectLatest { index ->
-                prefs.edit()
-                    .putInt("scroll_position", index)
-                    .apply()
+        }.debounce(400L).collectLatest { index ->
+                prefs.edit().putInt("scroll_position", index).apply()
             }
     }
 
@@ -311,9 +318,7 @@ fun PlaceListLazyColumn(
 //Function for displaying image in detail pages
 @Composable
 fun PlaceDetailImage(
-    selectedPlace: Place,
-    contentScale: ContentScale,
-    modifier: Modifier
+    selectedPlace: Place, contentScale: ContentScale, modifier: Modifier
 ) {
     Image(
         painter = painterResource(selectedPlace.placeImageResource),
@@ -352,8 +357,7 @@ fun PlaceDetail(
                 .fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier
-                    .padding(
+                modifier = Modifier.padding(
                         bottom = dimensionResource(id = R.dimen.medium10),
                         start = contentPadding.calculateStartPadding(layoutDirection),
                         end = contentPadding.calculateEndPadding(layoutDirection)
@@ -382,23 +386,23 @@ fun PlaceDetail(
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(dimensionResource(id = R.dimen.medium))
                 )
-                Row (
-                    modifier = Modifier.padding(bottom = 15.dp)
+                Row(
+                    modifier = Modifier
+                        .padding(bottom = 15.dp)
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
-                ){
+                ) {
                     Icon(
                         imageVector = Icons.Filled.LocationOn,
                         contentDescription = "",
                         modifier = Modifier.padding(start = 4.dp)
                     )
-                    Text(
-                        text = "${stringResource(id = R.string.lokalization)}: ${
-                            stringResource(
-                                selectedPlace.localizationResource
-                            )
-                        }",
+                    Text(text = "${stringResource(id = R.string.lokalization)}: ${
+                        stringResource(
+                            selectedPlace.localizationResource
+                        )
+                    }",
                         style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Justify,
                         color = MaterialTheme.colorScheme.secondary,
@@ -409,8 +413,7 @@ fun PlaceDetail(
                                     data = Uri.parse(selectedPlace.geolocation)
                                     startActivity(context, intent, null)
                                 }
-                            }
-                    )
+                            })
                 }
             }
         }
@@ -426,7 +429,7 @@ fun PlaceListAndDetail(
     selectedPlace: Place,
     onBackPressed: () -> Unit,
     context: Context,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     Row(
         modifier = Modifier
@@ -443,9 +446,7 @@ fun PlaceListAndDetail(
                 .weight(3f)
         ) {
             PlaceListLazyColumn(
-                places = places,
-                onClick = onClick,
-                prefs = prefs
+                places = places, onClick = onClick, prefs = prefs
             )
         }
         Box(
@@ -466,6 +467,10 @@ fun PlaceListAndDetail(
                 context = context
             )
         }
+    }
+
+    fun AlertDialogForSearchingBeacon() {
+
     }
 }
 

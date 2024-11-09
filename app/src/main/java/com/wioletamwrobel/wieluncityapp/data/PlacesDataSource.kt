@@ -1,5 +1,7 @@
 package com.wioletamwrobel.wieluncityapp.data
 
+import android.util.Log
+import com.kkmcn.kbeaconlib2.KBeacon
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Place
 
@@ -13,7 +15,8 @@ object PlacesDataSource {
             R.drawable.city_hall,
             R.drawable.city_hall_small,
             R.string.history,
-            "geo: 51.220479, 18.572694"
+            "geo: 51.220479, 18.572694",
+            "BC:57:29:0E:46:7B"
         ),
         Place(
             R.string.city_square,
@@ -22,7 +25,8 @@ object PlacesDataSource {
             R.drawable.plac_legionow,
             R.drawable.plac_legionow_small,
             R.string.entertainment,
-            "geo: 51.220557, 18.570109"
+            "geo: 51.220557, 18.570109",
+            null
         ),
         Place(
             R.string.former_castle,
@@ -31,7 +35,8 @@ object PlacesDataSource {
             R.drawable.former_castle,
             R.drawable.former_castle_small,
             R.string.history,
-            "geo: 51.219580, 18.572042"
+            "geo: 51.219580, 18.572042",
+            null
         ),
         Place(
             R.string.eternal_love_statue,
@@ -40,7 +45,8 @@ object PlacesDataSource {
             R.drawable.eternal_love_statue,
             R.drawable.eternal_love_statue_small,
             R.string.art,
-            "geo: 51.220142, 18.572191"
+            "geo: 51.220142, 18.572191",
+            "BC:57:29:0E:46:78"
         ),
         Place(
             R.string.saint_michael_church,
@@ -49,7 +55,8 @@ object PlacesDataSource {
             R.drawable.saint_michael_church,
             R.drawable.saint_michael_church_small,
             R.string.history,
-            "geo: 51.220004, 18.570964"
+            "geo: 51.220004, 18.570964",
+            null
         ),
         Place(
             R.string.defensive_walls,
@@ -58,7 +65,8 @@ object PlacesDataSource {
             R.drawable.defensive_walls,
             R.drawable.defensive_walls_small,
             R.string.history,
-            "geo: 51.221088, 18.573351"
+            "geo: 51.221088, 18.573351",
+            null
         ),
         Place(
             R.string.city_park,
@@ -67,7 +75,8 @@ object PlacesDataSource {
             R.drawable.park_center,
             R.drawable.park_center_small,
             R.string.nature,
-            "geo: 51.218106, 18.573711"
+            "geo: 51.218106, 18.573711",
+            null
         ),
         Place(
             R.string.museum,
@@ -76,7 +85,8 @@ object PlacesDataSource {
             R.drawable.museum,
             R.drawable.museum_small,
             R.string.history,
-            "geo: 51.220327, 18.567308"
+            "geo: 51.220327, 18.567308",
+            null
         ),
         Place(
             R.string.kaliska_street,
@@ -85,7 +95,8 @@ object PlacesDataSource {
             R.drawable.kaliska_street,
             R.drawable.kaliska_street_small,
             R.string.shops,
-            "geo: 51.221257, 18.564623"
+            "geo: 51.221257, 18.564623",
+            null
         ),
         Place(
             R.string.kaliska_gate,
@@ -94,7 +105,8 @@ object PlacesDataSource {
             R.drawable.kaliska_gate,
             R.drawable.kaliska_gate_small,
             R.string.history,
-            "geo: 51.220935, 18.566833"
+            "geo: 51.220935, 18.566833",
+            null
         ),
         Place(
             R.string.library,
@@ -103,7 +115,8 @@ object PlacesDataSource {
             R.drawable.library,
             R.drawable.library_small,
             R.string.entertainment,
-            "geo: 51.220797, 18.567925"
+            "geo: 51.220797, 18.567925",
+            null
         ),
         Place(
             R.string.cinema,
@@ -112,7 +125,8 @@ object PlacesDataSource {
             R.drawable.cinema,
             R.drawable.cinema_small,
             R.string.entertainment,
-            "geo: 51.220595, 18.568488"
+            "geo: 51.220595, 18.568488",
+            "BC:57:29:03:77:02"
         ),
         Place(
             R.string.park,
@@ -121,7 +135,8 @@ object PlacesDataSource {
             R.drawable.park,
             R.drawable.park_small,
             R.string.nature,
-            "geo: 51.221523, 18.554638"
+            "geo: 51.221523, 18.554638",
+            null
         ),
         Place(
             R.string.jewish_cemetery,
@@ -130,9 +145,23 @@ object PlacesDataSource {
             R.drawable.cementary,
             R.drawable.cementary_small,
             R.string.history,
-            "geo: 51.213356, 18.553898"
+            "geo: 51.213356, 18.553898",
+            null
         )
     )
 
     val defaultPlace = placeList[0]
+
+   fun findScannedPlace(foundedBeaconMac: String): Place {
+        for (place in placeList) {
+            Log.d(
+                "Debug",
+                "checking: ${place.beaconMac} against foundedbeacon: ${foundedBeaconMac}"
+            )
+            if (place.beaconMac == foundedBeaconMac) {
+                return place
+            }
+        }
+        return PlacesDataSource.defaultPlace
+    }
 }
