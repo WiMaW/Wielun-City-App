@@ -150,7 +150,7 @@ object PlacesDataSource {
         )
     )
 
-    val defaultPlace = placeList[0]
+    val defaultPlace = placeList[2]
 
    fun findScannedPlace(foundedBeaconMac: String): Place {
         for (place in placeList) {

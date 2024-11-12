@@ -102,6 +102,7 @@ fun WielunCityApp(
                 viewModel.navigateToListPage()
             },
             onScannerButtonClick = {
+                viewModel.startScanning(context, activity)
                 viewModel.navigateToDialog()
             },
             isShowingListPage = uiState.value.isShowingListPage,
@@ -143,6 +144,7 @@ fun WielunCityApp(
                         selectedPlace = uiState.value.currentPlace,
                         onBackPressed = {
                             viewModel.navigateToListPage()
+                            viewModel.cleanScannedBeacon()
                         },
                         contentPadding = innerPadding,
                         modifier = Modifier,
@@ -178,6 +180,7 @@ fun WielunCityApp(
             onConfirmButtonClicked = {
                 viewModel.scannerButtonResponse(context, activity)
             },
+            onConfirmButtonText = if (uiState.value.isScannerLoading) "Refresh" else "Search",
             onDismissButtonClicked = {
                 viewModel.navigateFromDialog()
                 viewModel.scannerStop()

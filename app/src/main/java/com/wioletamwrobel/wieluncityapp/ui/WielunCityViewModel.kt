@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import com.wioletamwrobel.wieluncityapp.beaconConnection.BeaconService
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource.placeList
+import com.wioletamwrobel.wieluncityapp.data.iBeaconsDataSource
 import com.wioletamwrobel.wieluncityapp.model.Place
 import com.wioletamwrobel.wieluncityapp.utils.ScannerState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -91,44 +92,43 @@ class MyBeautifulCityViewModel : ViewModel() {
     //beacon searching and updating current place to display detail paige
     private val beaconService = BeaconService()
     private var foundedPlace: Place = PlacesDataSource.defaultPlace
+    private var scannedListOfMacs: MutableList<String> = mutableListOf()
+
+    fun startScanning(context: Context, activity: Activity) {
+        beaconService.scanningForBeacon(context, activity)
+    }
 
     fun scannerButtonResponse(context: Context, activity: Activity) {
+        scannerLoading()
 
-
-
-
-
-
-        foundedPlace = beaconService.getfoundedPlace(context, activity)
-
-        when (beaconService.scannerState) {
-
-            ScannerState.LOADING -> {
-                Log.d(TAG, "Scanner State Loading")
-                scannerLoading()
-                foundedPlace = beaconService.getfoundedPlace(context, activity)
-            }
-
-            ScannerState.SUCCESS -> {
-                Log.d(TAG, "Scanner State Success")
-                scannerStop()
-                updateCurrentPlace(foundedPlace)
-                navigateFromDialog()
-                navigateToDetailPage()
-            }
-
-            ScannerState.ERROR -> {}
-
-            ScannerState.UNKNOWN -> {
-                foundedPlace = beaconService.getfoundedPlace(context, activity)
-                scannerLoading()
-                Log.d(TAG, "Scanner State Unknown")
-            }
+            for (iBeacon in beaconService.getScannedBeaconsMacList(context, activity)) {
+                if (iBeaconsDataSource.iBeaconList.contains(iBeacon)) {
+                    foundedPlace = findPlaceFromBeacon(iBeacon)
+                    beaconService.stopScanner()
+                    scannerStop()
+                    updateCurrentPlace(foundedPlace)
+                    navigateFromDialog()
+                    navigateToDetailPage()
+                }
         }
     }
 
+    private fun findPlaceFromBeacon(foundedBeaconMac: String): Place {
+
+        for (place in placeList) {
+            Log.d(
+                "Debug",
+                "checking: ${place.beaconMac} against foundedbeacon: ${foundedBeaconMac}"
+            )
+            if (place.beaconMac == foundedBeaconMac) {
+                return place
+            }
+        }
+        return PlacesDataSource.defaultPlace
+    }
+
     fun cleanScannedBeacon() {
-//        beaconService.clearBeacon()
+        beaconService.clearBeacon()
     }
 
     data class MyBeautifulCityUiState(

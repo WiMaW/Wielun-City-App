@@ -2,6 +2,13 @@ package com.wioletamwrobel.wieluncityapp.beaconConnection
 
 import android.Manifest
 import android.app.Activity
+import android.bluetooth.le.ScanSettings
+import android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES
+import android.bluetooth.le.ScanSettings.CALLBACK_TYPE_ALL_MATCHES_AUTO_BATCH
+import android.bluetooth.le.ScanSettings.CALLBACK_TYPE_FIRST_MATCH
+import android.bluetooth.le.ScanSettings.CALLBACK_TYPE_MATCH_LOST
+import android.bluetooth.le.ScanSettings.MATCH_MODE_AGGRESSIVE
+import android.bluetooth.le.ScanSettings.MATCH_MODE_STICKY
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
@@ -49,7 +56,7 @@ class BeaconService {
         ) {
             ActivityCompat.requestPermissions(
                 activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0
             );
         }
         //for android 12, the app need declare follow permissions
@@ -61,7 +68,7 @@ class BeaconService {
             ) {
                 ActivityCompat.requestPermissions(
                     activity,
-                    arrayOf(Manifest.permission.BLUETOOTH_SCAN), 3
+                    arrayOf(Manifest.permission.BLUETOOTH_SCAN), 0
                 );
             }
 
@@ -72,7 +79,7 @@ class BeaconService {
             ) {
                 ActivityCompat.requestPermissions(
                     activity,
-                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 4
+                    arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 0
                 );
             }
         }
@@ -83,37 +90,28 @@ class BeaconService {
         askingForPermission(context, activity)
         initializeBeaconManager(context)
 
-        beaconManager?.setScanMode(KBeaconsMgr.SCAN_MODE_BALANCED)
-        beaconManager?.scanMacFilter
+        beaconManager?.setScanMode(KBeaconsMgr.SCAN_MODE_LOW_LATENCY)
 
         val scanner = beaconManager?.startScanning()
 
         when (scanner) {
             0 -> {
-                ScannerState.LOADING
+              //  ScannerState.LOADING
                 beaconManager?.delegate = object : KBeaconMgrDelegate {
                     override fun onBeaconDiscovered(beacons: Array<out KBeacon>?) {
                         if (beacons != null) {
                             for (iBeacon in beacons) {
                                 beaconOnListMac.add(iBeacon.mac)
+                                Log.d(TAG, iBeacon.mac)
                             }
                         }
-                        beaconManager?.stopScanning()
                         Log.d(TAG, beaconOnListMac.toString())
                     }
 
                     override fun onCentralBleStateChang(nNewState: Int) {}
 
                     override fun onScanFailed(errorCode: Int) {
-                        scannerState = ScannerState.ERROR
-                    }
-                }
-                for (iBeacon in beaconOnListMac) {
-                    if (iBeaconsDataSource.iBeaconList.contains(iBeacon)) {
-                        foundedPlace = findPlaceFromBeacon(iBeacon)
-                        scannerState = ScannerState.SUCCESS
-                    } else {
-                        scannerState = ScannerState.UNKNOWN
+                //        scannerState = ScannerState.ERROR
                     }
                 }
             }
@@ -132,27 +130,18 @@ class BeaconService {
         }
     }
 
-    private fun findPlaceFromBeacon(foundedBeaconMac: String): Place {
-
-        for (place in placeList) {
-            Log.d(
-                "Debug",
-                "checking: ${place.beaconMac} against foundedbeacon: ${foundedBeaconMac}"
-            )
-            if (place.beaconMac == foundedBeaconMac) {
-                return place
-            }
-        }
-        return PlacesDataSource.defaultPlace
+    fun stopScanner() {
+        beaconManager?.stopScanning()
     }
 
-    fun getfoundedPlace(context: Context, activity: Activity): Place {
+
+    fun getScannedBeaconsMacList(context: Context, activity: Activity): MutableList<String> {
         scanningForBeacon(context, activity)
-        return foundedPlace
+        return beaconOnListMac
     }
 
     fun clearBeacon() {
         beaconManager?.clearBeacons()
-        // beaconOnListMac = ""
+        beaconOnListMac.clear()
     }
 }

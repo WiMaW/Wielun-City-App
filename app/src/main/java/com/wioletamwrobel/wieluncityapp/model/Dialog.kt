@@ -14,6 +14,7 @@ object Dialog {
         title: String,
         dialogText: String,
         onConfirmButtonClicked: () -> Unit,
+        onConfirmButtonText: String,
         onDismissButtonClicked: () -> Unit,
     ) {
         AlertDialog(
@@ -37,7 +38,7 @@ object Dialog {
                     onClick = onConfirmButtonClicked
                 ) {
                     Text(
-                        "Search",
+                        onConfirmButtonText,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
