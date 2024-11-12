@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -31,13 +33,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -63,30 +64,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.NavController
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
 import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
-import com.wioletamwrobel.wieluncityapp.utilis.PlacesContentType
+import com.wioletamwrobel.wieluncityapp.utils.PlacesContentType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 
-//main function responsible for displaying main screen of the app depending of window size
+//main function responsible for displaying main screen of the app depending on window size
 @Composable
 fun WielunCityApp(
     onBackPressed: () -> Unit,
     windowSize: WindowWidthSizeClass,
     context: Context,
+    activity: Activity,
     prefs: SharedPreferences,
     viewModel: MyBeautifulCityViewModel,
-    uiState: State<MyBeautifulCityUiState>
+    uiState: State<MyBeautifulCityUiState>,
+    navController: NavController
 ) {
     val contentType = when (windowSize) {
         WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> PlacesContentType.LIST_ONLY
@@ -119,7 +121,7 @@ fun WielunCityApp(
                 context = context,
             )
         } else {
-            if (uiState.value.isShowingListPage && !uiState.value.isBeaconScanned) {
+            if (uiState.value.isShowingListPage) {
                 PlaceListLazyColumn(
                     places = uiState.value.placesList, onClick = {
                         viewModel.updateCurrentPlace(it)
@@ -154,11 +156,32 @@ fun WielunCityApp(
     }
     if (uiState.value.isScannerButtonClicked) {
         Dialog.CreateDialog(
-            icon = {Icon(Icons.Filled.Search, "search_icon")},
-            title = "Search for Place",
-            dialogText = "make sure that your device has internet connection",
-            onConfirmButtonClicked = {},
-            onDismissButtonClicked = {viewModel.navigateFromDialog()}
+            icon = {
+                if (uiState.value.isScannerLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Icon(
+                        Icons.Filled.Search,
+                        "search_icon",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
+            },
+            title =
+            if (uiState.value.isScannerLoading) {
+                "Searching..."
+            } else {
+                "Search for Place"
+            },
+            dialogText = "make sure that your device has bluetooth connection",
+            onConfirmButtonClicked = {
+                viewModel.scannerButtonResponse(context, activity)
+            },
+            onDismissButtonClicked = {
+                viewModel.navigateFromDialog()
+                viewModel.scannerStop()
+            }
         )
     }
 }
@@ -303,8 +326,8 @@ fun PlaceListLazyColumn(
         snapshotFlow {
             lazyListState.firstVisibleItemIndex
         }.debounce(400L).collectLatest { index ->
-                prefs.edit().putInt("scroll_position", index).apply()
-            }
+            prefs.edit().putInt("scroll_position", index).apply()
+        }
     }
 
     LazyColumn(
@@ -368,10 +391,10 @@ fun PlaceDetail(
         ) {
             Column(
                 modifier = Modifier.padding(
-                        bottom = dimensionResource(id = R.dimen.medium10),
-                        start = contentPadding.calculateStartPadding(layoutDirection),
-                        end = contentPadding.calculateEndPadding(layoutDirection)
-                    )
+                    bottom = dimensionResource(id = R.dimen.medium10),
+                    start = contentPadding.calculateStartPadding(layoutDirection),
+                    end = contentPadding.calculateEndPadding(layoutDirection)
+                )
             ) {
                 PlaceDetailImage(
                     selectedPlace = selectedPlace,
@@ -479,5 +502,6 @@ fun PlaceListAndDetail(
         }
     }
 }
+
 
 

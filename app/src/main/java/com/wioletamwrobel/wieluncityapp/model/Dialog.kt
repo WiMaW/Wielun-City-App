@@ -21,13 +21,14 @@ object Dialog {
             title = {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             },
             text = {
                 Text(
                     text = dialogText,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 },
             onDismissRequest = onDismissButtonClicked,

@@ -1,5 +1,6 @@
 package com.wioletamwrobel.wieluncityapp
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -72,7 +73,8 @@ class MainActivity : ComponentActivity() {
                         windowSize = windowSize,
                         onBackPressed = { finish() },
                         prefs = prefs,
-                        context = context
+                        context = context,
+                        activity = this
                     )
                 }
             }
@@ -165,7 +167,8 @@ class MainActivity : ComponentActivity() {
         windowSize: WindowSizeClass,
         onBackPressed: () -> Unit,
         prefs: SharedPreferences,
-        context: Context
+        context: Context,
+        activity: Activity,
     ) {
         val navController = rememberNavController()
 
@@ -180,7 +183,9 @@ class MainActivity : ComponentActivity() {
                     prefs = prefs,
                     context = context,
                     viewModel = viewModel,
-                    uiState = uiState
+                    uiState = uiState,
+                    activity = activity,
+                    navController = navController
                 )
             }
         }
