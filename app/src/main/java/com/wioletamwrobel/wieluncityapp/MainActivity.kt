@@ -43,8 +43,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel
-import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
+import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel
+import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityApp
 import com.wioletamwrobel.wieluncityapp.ui.theme.WielunCityAppTheme
 import kotlinx.coroutines.delay
@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
         applicationContext.getSharedPreferences("prefs", MODE_PRIVATE)
     }
 
-    private val viewModel = MyBeautifulCityViewModel()
-    private lateinit var uiState: State<MyBeautifulCityUiState>
+    private val viewModel = WielunCityViewModel()
+    private lateinit var uiState: State<WielunCityUiState>
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +68,6 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     val windowSize = calculateWindowSizeClass(activity = this)
                     val context = LocalContext.current
-//                    viewModel.findBeacon(this, this)
                     Navigation(
                         windowSize = windowSize,
                         onBackPressed = { finish() },
@@ -185,7 +184,6 @@ class MainActivity : ComponentActivity() {
                     viewModel = viewModel,
                     uiState = uiState,
                     activity = activity,
-                    navController = navController
                 )
             }
         }

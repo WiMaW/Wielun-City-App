@@ -1,6 +1,6 @@
 package com.wioletamwrobel.wieluncityapp.model
 
-data class iBeacon (
+data class Beacon (
     val mac: String,
     val beaconName: String
 )

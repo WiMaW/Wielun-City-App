@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -35,12 +34,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -65,15 +63,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.navigation.NavController
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
-import com.wioletamwrobel.wieluncityapp.ui.MyBeautifulCityViewModel.MyBeautifulCityUiState
+import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
 import com.wioletamwrobel.wieluncityapp.utils.PlacesContentType
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -86,10 +81,10 @@ fun WielunCityApp(
     context: Context,
     activity: Activity,
     prefs: SharedPreferences,
-    viewModel: MyBeautifulCityViewModel,
-    uiState: State<MyBeautifulCityUiState>,
-    navController: NavController
-) {
+    viewModel: WielunCityViewModel,
+    uiState: State<WielunCityUiState>,
+
+    ) {
     val contentType = when (windowSize) {
         WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> PlacesContentType.LIST_ONLY
         WindowWidthSizeClass.Expanded -> PlacesContentType.LIST_AND_DETAIL
@@ -97,7 +92,7 @@ fun WielunCityApp(
     }
 
     Scaffold(topBar = {
-        AppBar(
+        TopAppBar(
             onBackButtonClick = {
                 viewModel.navigateToListPage()
             },
@@ -127,7 +122,8 @@ fun WielunCityApp(
                     places = uiState.value.placesList, onClick = {
                         viewModel.updateCurrentPlace(it)
                         viewModel.navigateToDetailPage()
-                    }, contentPadding = innerPadding, prefs = prefs
+                    }, contentPadding = innerPadding,
+                    prefs = prefs
                 )
             } else {
                 Box(
@@ -164,7 +160,7 @@ fun WielunCityApp(
                 } else {
                     Icon(
                         Icons.Filled.Search,
-                        "search_icon",
+                        stringResource(R.string.search_icon_description),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(35.dp)
                     )
@@ -172,34 +168,37 @@ fun WielunCityApp(
             },
             title =
             if (uiState.value.isScannerLoading) {
-                "Searching..."
+                stringResource(R.string.search_dialog_title_loading)
             } else {
-                "Search for Place"
+                stringResource(R.string.search_dialog_title)
             },
-            dialogText = "make sure that your device has bluetooth connection",
+            dialogText = stringResource(R.string.search_dialog_text),
             onConfirmButtonClicked = {
                 viewModel.scannerButtonResponse(context, activity)
             },
-            onConfirmButtonText = if (uiState.value.isScannerLoading) "Refresh" else "Search",
+            onConfirmButtonText = if (uiState.value.isScannerLoading) stringResource(R.string.confirm_button_refresh) else stringResource(
+                R.string.confirm_button_search
+            ),
             onDismissButtonClicked = {
                 viewModel.navigateFromDialog()
                 viewModel.scannerStop()
+                viewModel.cleanScannedBeacon()
             }
         )
     }
 }
 
-//top app bar in placeandDetail view displaying "Places to visit", in detail view only place category and a backButton
+//top app bar in placeAndDetail view displaying "Places to visit", in detail view only place category and a backButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(
+fun TopAppBar(
     onBackButtonClick: () -> Unit,
     onScannerButtonClick: () -> Unit,
     isShowingListPage: Boolean,
     selectedPlace: Place,
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
-    uiState: State<MyBeautifulCityUiState>,
+    uiState: State<WielunCityUiState>,
 ) {
     val isShowingDetailPage = windowSize != WindowWidthSizeClass.Expanded && !isShowingListPage
 
@@ -238,7 +237,6 @@ fun AppBar(
 }
 
 //UI for item in lazyColumn list with places to visit
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceListItem(
     place: Place,
@@ -279,7 +277,7 @@ fun PlaceListItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                Divider(modifier = Modifier.height(dimensionResource(id = R.dimen.divider_height)))
+                HorizontalDivider(modifier = Modifier.height(dimensionResource(id = R.dimen.divider_height)))
                 Text(
                     text = stringResource(place.localizationResource),
                     style = MaterialTheme.typography.labelMedium,
@@ -410,7 +408,7 @@ fun PlaceDetail(
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(dimensionResource(id = R.dimen.medium))
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .height(dimensionResource(id = R.dimen.divider_height))
                         .padding(horizontal = dimensionResource(id = R.dimen.medium))
@@ -434,7 +432,7 @@ fun PlaceDetail(
                         contentDescription = "",
                         modifier = Modifier.padding(start = 4.dp)
                     )
-                    Text(text = "${stringResource(id = R.string.lokalization)}: ${
+                    Text(text = "${stringResource(id = R.string.localization)}: ${
                         stringResource(
                             selectedPlace.localizationResource
                         )

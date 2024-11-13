@@ -5,6 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.wioletamwrobel.wieluncityapp.R
 
 object Dialog {
 
@@ -48,7 +50,7 @@ object Dialog {
                     onClick = onDismissButtonClicked
                 ) {
                     Text(
-                       "Cancel",
+                        stringResource(R.string.dialog_dismissButton_text),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

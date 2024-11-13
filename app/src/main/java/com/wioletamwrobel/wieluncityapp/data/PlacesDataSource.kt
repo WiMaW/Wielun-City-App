@@ -1,7 +1,5 @@
 package com.wioletamwrobel.wieluncityapp.data
 
-import android.util.Log
-import com.kkmcn.kbeaconlib2.KBeacon
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Place
 
@@ -16,7 +14,7 @@ object PlacesDataSource {
             R.drawable.city_hall_small,
             R.string.history,
             "geo: 51.220479, 18.572694",
-            "BC:57:29:0E:46:7B"
+            null
         ),
         Place(
             R.string.city_square,
@@ -136,7 +134,7 @@ object PlacesDataSource {
             R.drawable.park_small,
             R.string.nature,
             "geo: 51.221523, 18.554638",
-            null
+            "BC:57:29:0E:46:7B"
         ),
         Place(
             R.string.jewish_cemetery,
@@ -150,18 +148,5 @@ object PlacesDataSource {
         )
     )
 
-    val defaultPlace = placeList[2]
-
-   fun findScannedPlace(foundedBeaconMac: String): Place {
-        for (place in placeList) {
-            Log.d(
-                "Debug",
-                "checking: ${place.beaconMac} against foundedbeacon: ${foundedBeaconMac}"
-            )
-            if (place.beaconMac == foundedBeaconMac) {
-                return place
-            }
-        }
-        return PlacesDataSource.defaultPlace
-    }
+    val defaultPlace = placeList[0]
 }

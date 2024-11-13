@@ -7,7 +7,7 @@
     <string name="app_bar">Places to visit</string>
     <string name="back_button">Back button</string>
 
-    <string name="lokalization">Lokalization</string>
+    <string name="localization">Localization</string>
 
     <string name="history">History</string>
     <string name="art">Art</string>
@@ -82,5 +82,16 @@
     <string name="jewish_cemetery">Jewish Cemetery</string>
     <string name="jewish_cemetery_description">The cemetery, established in the first half of the 19th century, was located on the suburbs of Wieluń. During World War II, mass executions of Poles and Jews took place there. The cemetery was demolished by the German army, and the tombstones obtained in this way were used to pave roads and a swimming pool. After the war, trees were planted in the area, and in 1980, a stone was placed to commemorate the victims.</string>
     <string name="jewish_cemetery_localization">Kijak Street</string>
+
+    <string name="ble_not_enable_massage">Bluetooth function is not enable</string>
+    <string name="scan_error_unknown_massage">Please make sure the app has Bluetooth scan permission</string>
+    <string name="on_Scan_Failed_massage">Scanning option is currently unavailable on your device</string>
+    <string name="dialog_dismissButton_text">Cancel</string>
+    <string name="search_icon_description">search_icon</string>
+    <string name="search_dialog_title_loading">Searching...</string>
+    <string name="search_dialog_title">Search for Place</string>
+    <string name="search_dialog_text">make sure that your device has bluetooth connection</string>
+    <string name="confirm_button_search">Search</string>
+    <string name="confirm_button_refresh">Refresh</string>
 
 </resources>

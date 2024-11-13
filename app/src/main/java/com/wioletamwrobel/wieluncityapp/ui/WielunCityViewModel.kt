@@ -1,35 +1,29 @@
 package com.wioletamwrobel.wieluncityapp.ui
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.wioletamwrobel.wieluncityapp.beaconConnection.BeaconService
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource.placeList
-import com.wioletamwrobel.wieluncityapp.data.iBeaconsDataSource
+import com.wioletamwrobel.wieluncityapp.data.BeaconsDataSource
 import com.wioletamwrobel.wieluncityapp.model.Place
-import com.wioletamwrobel.wieluncityapp.utils.ScannerState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class MyBeautifulCityViewModel : ViewModel() {
+class WielunCityViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        MyBeautifulCityUiState(
+        WielunCityUiState(
             placesList = placeList,
             currentPlace = PlacesDataSource.defaultPlace
         )
     )
 
-    val uiState: StateFlow<MyBeautifulCityUiState> = _uiState
+    val uiState: StateFlow<WielunCityUiState> = _uiState
 
     //update current(selected) place when user click on it in list view; navigation to list and detail view
     fun updateCurrentPlace(selectedPlace: Place) {
@@ -72,7 +66,12 @@ class MyBeautifulCityViewModel : ViewModel() {
         }
     }
 
-    fun scannerLoading() {
+
+    //beacon searching and updating current place to display detail paige
+    private val beaconService = BeaconService()
+    private var foundedPlace: Place = PlacesDataSource.defaultPlace
+
+    private fun scannerLoading() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isScannerLoading = true)
@@ -88,12 +87,6 @@ class MyBeautifulCityViewModel : ViewModel() {
         }
     }
 
-
-    //beacon searching and updating current place to display detail paige
-    private val beaconService = BeaconService()
-    private var foundedPlace: Place = PlacesDataSource.defaultPlace
-    private var scannedListOfMacs: MutableList<String> = mutableListOf()
-
     fun startScanning(context: Context, activity: Activity) {
         beaconService.scanningForBeacon(context, activity)
     }
@@ -101,25 +94,20 @@ class MyBeautifulCityViewModel : ViewModel() {
     fun scannerButtonResponse(context: Context, activity: Activity) {
         scannerLoading()
 
-            for (iBeacon in beaconService.getScannedBeaconsMacList(context, activity)) {
-                if (iBeaconsDataSource.iBeaconList.contains(iBeacon)) {
-                    foundedPlace = findPlaceFromBeacon(iBeacon)
-                    beaconService.stopScanner()
-                    scannerStop()
-                    updateCurrentPlace(foundedPlace)
-                    navigateFromDialog()
-                    navigateToDetailPage()
-                }
+        for (iBeacon in beaconService.getScannedBeaconsMacList(context, activity)) {
+            if (BeaconsDataSource.placesBeaconList.contains(iBeacon)) {
+                foundedPlace = findPlaceFromBeacon(iBeacon)
+                beaconService.stopScanner()
+                scannerStop()
+                updateCurrentPlace(foundedPlace)
+                navigateFromDialog()
+                navigateToDetailPage()
+            }
         }
     }
 
     private fun findPlaceFromBeacon(foundedBeaconMac: String): Place {
-
         for (place in placeList) {
-            Log.d(
-                "Debug",
-                "checking: ${place.beaconMac} against foundedbeacon: ${foundedBeaconMac}"
-            )
             if (place.beaconMac == foundedBeaconMac) {
                 return place
             }
@@ -131,7 +119,7 @@ class MyBeautifulCityViewModel : ViewModel() {
         beaconService.clearBeacon()
     }
 
-    data class MyBeautifulCityUiState(
+    data class WielunCityUiState(
         val placesList: List<Place> = emptyList(),
         val currentPlace: Place = PlacesDataSource.defaultPlace,
         val isShowingListPage: Boolean = true,

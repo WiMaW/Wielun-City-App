@@ -1,6 +1,5 @@
 package com.wioletamwrobel.wieluncityapp.ui.theme
 
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 
 val light_primary = Color(0xFFE9B824)

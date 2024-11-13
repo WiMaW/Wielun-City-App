@@ -8,7 +8,7 @@
     <string name="app_bar">Warto zobaczyć</string>
     <string name="back_button">Wstecz</string>
 
-    <string name="lokalization">Lokalizacja</string>
+    <string name="localization">Lokalizacja</string>
 
     <string name="history">Historia</string>
     <string name="art">Sztuka</string>
@@ -83,5 +83,16 @@
     <string name="jewish_cemetery">Cmentarz żydowski</string>
     <string name="jewish_cemetery_description">Powstały w pierwszej połowie XIX wieku cmentarz zlokalizowany został na przedmieściach Wielunia. Podczas II Wojny Światowej odbywały się na nim masowe egzekucje polaków i żydów. Cmentarz został zdemolowany przez armię niemiecką, a uzyskane w ten sposób kamienie nagorbne posłużyły do wyłożenia dróg i basenu kąpielowego. Po wojnie na terenie posadzono drzewa, a w 1980 r. ustawiono kamień upamiętniający ofiary. </string>
     <string name="jewish_cemetery_localization">ul. Kijak</string>
+
+    <string name="ble_not_enable_massage">Funkcja Bluetooth nie jest włączona</string>
+    <string name="scan_error_unknown_massage">Upewnij się, że aplikacja ma pozwolenie na skanowanie Bluetooth</string>
+    <string name="on_Scan_Failed_massage">Opcja skanowania jest obecnie niedostępna na Twoim urządzeniu</string>
+    <string name="dialog_dismissButton_text">Anuluj</string>
+    <string name="search_icon_description">szukaj_ikona</string>
+    <string name="search_dialog_title_loading">Szukam...</string>
+    <string name="search_dialog_title">Szukaj miejsca</string>
+    <string name="search_dialog_text">upewnij się że twoje urządzenie ma włączoną funkcję bluetooth</string>
+    <string name="confirm_button_search">Szukaj</string>
+    <string name="confirm_button_refresh">Odświerz</string>
 
 </resources>
