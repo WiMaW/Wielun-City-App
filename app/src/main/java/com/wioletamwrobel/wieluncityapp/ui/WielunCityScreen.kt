@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -32,6 +33,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -49,10 +51,15 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -62,13 +69,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
-import androidx.core.net.toUri
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.media3.ui.PlayerView
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
-import com.wioletamwrobel.wieluncityapp.player.AudioPlayerService
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
 import com.wioletamwrobel.wieluncityapp.utils.PlaceActionType
@@ -76,7 +82,6 @@ import com.wioletamwrobel.wieluncityapp.utils.PlacesContentType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -142,7 +147,8 @@ fun WielunCityApp(
                 onBackPressed = onBackPressed,
                 prefs = prefs,
                 context = context,
-                viewModel = viewModel
+                viewModel = viewModel,
+                uiState = uiState
             )
         } else {
             if (uiState.value.isShowingListPage) {
@@ -175,7 +181,8 @@ fun WielunCityApp(
                         imageHeight = dimensionResource(id = R.dimen.place_detail_image_height),
                         contentScale = ContentScale.Crop,
                         context = context,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        uiState = uiState
                     )
                 }
             }
@@ -213,7 +220,8 @@ fun WielunCityApp(
                 viewModel.navigateFromDialog()
                 viewModel.stopLoading()
                 viewModel.cleanScannedBeacon()
-            }
+            },
+            onDismissButtonText = stringResource(R.string.dialog_dismissButton_text)
         )
     }
 }
@@ -402,15 +410,19 @@ fun PlaceDetail(
     contentScale: ContentScale,
     context: Context,
     viewModel: WielunCityViewModel,
+    uiState: State<WielunCityUiState>,
     modifier: Modifier = Modifier
 ) {
     BackHandler { onBackPressed() }
 
 
     if (selectedPlace.placeAction != null) {
-        DetailPlaceAction(selectedPlace, viewModel, context)
+        DetailPlaceAction(
+            selectedPlace,
+            viewModel,
+            context,
+        )
     }
-
 
     val scrollState = rememberScrollState()
     val layoutDirection = LocalLayoutDirection.current
@@ -434,11 +446,23 @@ fun PlaceDetail(
                     end = contentPadding.calculateEndPadding(layoutDirection)
                 )
             ) {
-                PlaceDetailImage(
-                    selectedPlace = selectedPlace,
-                    modifier = Modifier.height(imageHeight),
-                    contentScale = contentScale
-                )
+                if (uiState.value.isMovieToPlay) {
+                    Box(modifier = Modifier.height(350.dp)) {
+                        AndroidView(factory = {
+                            PlayerView(context).apply {
+                                player = viewModel.getPlayer(selectedPlace.placeAction.toString().toInt(), context)
+                                player?.play()
+                            }
+                        }, modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                } else {
+                    PlaceDetailImage(
+                        selectedPlace = selectedPlace,
+                        modifier = Modifier.height(imageHeight),
+                        contentScale = contentScale
+                    )
+                }
                 Text(
                     text = stringResource(selectedPlace.nameResource),
                     style = MaterialTheme.typography.bodyMedium,
@@ -492,7 +516,15 @@ fun PlaceDetail(
 }
 
 @Composable
-fun DetailPlaceAction(place: Place, viewModel: WielunCityViewModel, context: Context) {
+fun DetailPlaceAction(
+    place: Place,
+    viewModel: WielunCityViewModel,
+    context: Context,
+) {
+
+    var showDialog by remember { mutableStateOf(true) }
+    val intentActionView = Intent(Intent.ACTION_VIEW)
+
     if (place.placeAction != null) {
         when (place.placeActionType) {
             PlaceActionType.AUDIO -> {
@@ -500,20 +532,44 @@ fun DetailPlaceAction(place: Place, viewModel: WielunCityViewModel, context: Con
                     viewModel.startAudio(place.placeAction.toString().toInt(), context)
                 }
             }
-            PlaceActionType.PAGE -> {
 
-            }
+            PlaceActionType.PAGE -> {}
             PlaceActionType.MOVIE -> {
+                viewModel.startMovie()
 
             }
+
             PlaceActionType.NOTIFICATION -> {}
+            PlaceActionType.DIALOG -> {
+                if (showDialog) {
+                    Dialog.CreateDialog(
+                        icon = {
+                            Icon(
+                                Icons.Filled.Info,
+                                "info_icon",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(35.dp)
+                            )
+                        },
+                        title = "A może bilecik?",
+                        dialogText = "upewnij się, że masz dostęp do internetu",
+                        onConfirmButtonClicked = {
+                            intentActionView.apply {
+                                data = Uri.parse(place.placeAction.toString())
+                                startActivity(context, intentActionView, null)
+                            }
+                            showDialog = false
+                        },
+                        onConfirmButtonText = "Prowadź",
+                        onDismissButtonClicked = { showDialog = false },
+                        onDismissButtonText = "Nie, dziękuje"
+                    )
+                }
+            }
+
             null -> {}
         }
     }
-}
-
-fun DetailPlaceActionAudio() {
-
 }
 
 //Function for displaying main screen - place and detail view for larger screen sizes
@@ -526,6 +582,7 @@ fun PlaceListAndDetail(
     onBackPressed: () -> Unit,
     context: Context,
     viewModel: WielunCityViewModel,
+    uiState: State<WielunCityUiState>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     Row(
@@ -563,6 +620,7 @@ fun PlaceListAndDetail(
                 contentScale = ContentScale.Crop,
                 context = context,
                 viewModel = viewModel,
+                uiState = uiState
             )
         }
     }

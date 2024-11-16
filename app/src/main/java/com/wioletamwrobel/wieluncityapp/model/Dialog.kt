@@ -18,6 +18,7 @@ object Dialog {
         onConfirmButtonClicked: () -> Unit,
         onConfirmButtonText: String,
         onDismissButtonClicked: () -> Unit,
+        onDismissButtonText: String
     ) {
         AlertDialog(
             icon = icon,
@@ -50,7 +51,7 @@ object Dialog {
                     onClick = onDismissButtonClicked
                 ) {
                     Text(
-                        stringResource(R.string.dialog_dismissButton_text),
+                        onDismissButtonText,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }

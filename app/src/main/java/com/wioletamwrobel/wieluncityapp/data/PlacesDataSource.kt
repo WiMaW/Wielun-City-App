@@ -27,7 +27,7 @@ object PlacesDataSource {
             R.drawable.plac_legionow_small,
             R.string.entertainment,
             "geo: 51.220557, 18.570109",
-            "https://youtu.be/kw40WI_xbG0?si=6-veYjCQLZLMXy-g",
+            R.raw.main_square_movie480,
             PlaceActionType.MOVIE,
             "BC:57:29:0E:46:7B",
         ),
@@ -147,8 +147,8 @@ object PlacesDataSource {
             R.drawable.cinema_small,
             R.string.entertainment,
             "geo: 51.220595, 18.568488",
-            "https://kinosyrena.pl/wp-content/uploads/2024/11/15.11.2024-21.11.2024-1-scaled.jpg",
-            PlaceActionType.PAGE,
+            "https://bilety.wdkwielun.pl",
+            PlaceActionType.DIALOG,
             "BC:57:29:03:77:02"
         ),
         Place(

@@ -2,9 +2,9 @@ package com.wioletamwrobel.wieluncityapp.ui
 
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.exoplayer.ExoPlayer
 import com.wioletamwrobel.wieluncityapp.beaconConnection.BeaconService
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource.placeList
@@ -138,11 +138,22 @@ class WielunCityViewModel : ViewModel() {
 
     //VideoPlayerService
 
-    fun startVideo(uri: Uri, context: Context) {
-        val playerService = VideoPlayerService(uri, context)
-        val player = playerService.getPlayer()
-        player.play()
+    private val videoPlayerService = VideoPlayerService()
+
+    fun getPlayer(video: Int, context: Context) : ExoPlayer? {
+        return videoPlayerService.getPlayer(video, context)
     }
+
+    fun startMovie() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isMovieToPlay = true)
+            }
+        }
+    }
+
+
+
 
     //AudioPlayerService
     private val audioPlayer = AudioPlayerService()
@@ -163,6 +174,7 @@ class WielunCityViewModel : ViewModel() {
         val isScannerButtonClicked: Boolean = false,
         val isScannerLoading: Boolean = false,
         val isBeaconScanned: Boolean = false,
+        val isMovieToPlay: Boolean = false,
     )
 }
 
