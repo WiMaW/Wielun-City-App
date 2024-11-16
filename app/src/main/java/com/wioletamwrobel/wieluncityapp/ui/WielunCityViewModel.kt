@@ -71,7 +71,7 @@ class WielunCityViewModel : ViewModel() {
     private val beaconService = BeaconService()
     private var foundedPlace: Place = PlacesDataSource.defaultPlace
 
-    private fun scannerLoading() {
+    fun scannerLoading() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isScannerLoading = true)
@@ -79,7 +79,7 @@ class WielunCityViewModel : ViewModel() {
         }
     }
 
-    fun scannerStop() {
+    fun stopLoading() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(isScannerLoading = false)
@@ -92,16 +92,27 @@ class WielunCityViewModel : ViewModel() {
     }
 
     fun scannerButtonResponse(context: Context, activity: Activity) {
-        scannerLoading()
 
-        for (iBeacon in beaconService.getScannedBeaconsMacList(context, activity)) {
-            if (BeaconsDataSource.placesBeaconList.contains(iBeacon)) {
-                foundedPlace = findPlaceFromBeacon(iBeacon)
+        for (beacon in beaconService.getScannedBeaconsMacList(context, activity)) {
+            if (BeaconsDataSource.placesBeaconList.contains(beacon.mac)) {
+                foundedPlace = findPlaceFromBeacon(beacon.mac)
                 beaconService.stopScanner()
-                scannerStop()
+                stopLoading()
                 updateCurrentPlace(foundedPlace)
                 navigateFromDialog()
                 navigateToDetailPage()
+            }
+        }
+    }
+
+    fun scannerResponseWithoutButton(context: Context, activity: Activity) {
+        for (beacon in beaconService.getScannedBeaconsMacList(context, activity)) {
+            if (BeaconsDataSource.placesBeaconList.contains(beacon.mac)) {
+                foundedPlace = findPlaceFromBeacon(beacon.mac)
+                cleanScannedBeacon()
+                updateCurrentPlace(foundedPlace)
+                navigateToDetailPage()
+
             }
         }
     }
@@ -113,6 +124,10 @@ class WielunCityViewModel : ViewModel() {
             }
         }
         return PlacesDataSource.defaultPlace
+    }
+
+    fun stopScanning() {
+        beaconService.stopScanner()
     }
 
     fun cleanScannedBeacon() {

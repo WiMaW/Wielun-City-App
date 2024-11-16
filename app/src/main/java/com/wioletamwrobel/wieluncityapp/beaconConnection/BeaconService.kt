@@ -2,9 +2,12 @@ package com.wioletamwrobel.wieluncityapp.beaconConnection
 
 import android.Manifest
 import android.app.Activity
+import android.bluetooth.le.ScanSettings
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,7 +19,7 @@ import com.wioletamwrobel.wieluncityapp.R
 class BeaconService {
 
     private var beaconManager: KBeaconsMgr? = null
-    var beaconsListMac: MutableList<String> = mutableListOf()
+    var beaconsListMac: MutableSet<KBeacon> = mutableSetOf()
 
     private fun initializeBeaconManager(context: Context) {
         beaconManager = KBeaconsMgr.sharedBeaconManager(context)
@@ -75,14 +78,21 @@ class BeaconService {
 
         val scanner = beaconManager?.startScanning()
 
+        beaconManager?.setScanSetting(ScanSettings.Builder().apply {
+
+        })
+
+
         when (scanner) {
             0 -> {
                 beaconManager?.delegate = object : KBeaconMgrDelegate {
                     override fun onBeaconDiscovered(beacons: Array<out KBeacon>?) {
                         if (beacons != null) {
                             for (beacon in beacons) {
-                                beaconsListMac.add(beacon.mac)
+                                Log.d(TAG, "BeaconMac: ${beacon.mac}, beaconRSSI: ${beacon.rssi}")
+                                beaconsListMac.add(beacon)
                             }
+                            Log.d(TAG, "BeaconList: ${beaconsListMac}")
                         }
                     }
 
@@ -116,7 +126,7 @@ class BeaconService {
         beaconManager?.stopScanning()
     }
 
-    fun getScannedBeaconsMacList(context: Context, activity: Activity): MutableList<String> {
+    fun getScannedBeaconsMacList(context: Context, activity: Activity): MutableSet<KBeacon> {
         scanningForBeacon(context, activity)
         return beaconsListMac
     }

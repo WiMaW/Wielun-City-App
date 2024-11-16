@@ -80,6 +80,34 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.startScanning(this, this)
+        viewModel.scannerResponseWithoutButton(this, this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.startScanning(this, this)
+        viewModel.scannerResponseWithoutButton(this, this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopScanning()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.stopScanning()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.stopScanning()
+        viewModel.cleanScannedBeacon()
+    }
+
     @Composable
     fun SplashScreen(
         navController: NavController

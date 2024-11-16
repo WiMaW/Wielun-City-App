@@ -69,9 +69,15 @@ import com.wioletamwrobel.wieluncityapp.model.Place
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
 import com.wioletamwrobel.wieluncityapp.utils.PlacesContentType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 //main function responsible for displaying main screen of the app depending on window size
 @Composable
@@ -89,6 +95,19 @@ fun WielunCityApp(
         WindowWidthSizeClass.Compact, WindowWidthSizeClass.Medium -> PlacesContentType.LIST_ONLY
         WindowWidthSizeClass.Expanded -> PlacesContentType.LIST_AND_DETAIL
         else -> PlacesContentType.LIST_ONLY
+    }
+
+    val scope = CoroutineScope(Dispatchers.Main)
+
+    LaunchedEffect(key1 = true) {
+        scope.launch {
+            while (true) {
+                withContext(Dispatchers.IO) {
+                    delay(3000)
+                    viewModel.scannerResponseWithoutButton(context, activity)
+                }
+            }
+        }
     }
 
     Scaffold(topBar = {
@@ -174,6 +193,7 @@ fun WielunCityApp(
             },
             dialogText = stringResource(R.string.search_dialog_text),
             onConfirmButtonClicked = {
+                viewModel.scannerLoading()
                 viewModel.scannerButtonResponse(context, activity)
             },
             onConfirmButtonText = if (uiState.value.isScannerLoading) stringResource(R.string.confirm_button_refresh) else stringResource(
@@ -181,7 +201,7 @@ fun WielunCityApp(
             ),
             onDismissButtonClicked = {
                 viewModel.navigateFromDialog()
-                viewModel.scannerStop()
+                viewModel.stopLoading()
                 viewModel.cleanScannedBeacon()
             }
         )
