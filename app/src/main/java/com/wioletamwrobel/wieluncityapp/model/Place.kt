@@ -2,6 +2,7 @@ package com.wioletamwrobel.wieluncityapp.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.wioletamwrobel.wieluncityapp.utils.PlaceActionType
 
 data class Place(
     @StringRes val nameResource: Int,
@@ -11,6 +12,8 @@ data class Place(
     @DrawableRes val placeImageResourceSmall: Int,
     @StringRes val placeCategory: Int,
     val geolocation: String,
+    val placeAction: String?,
+    val placeActionType: PlaceActionType?,
     val beaconMac: String?
 )
 

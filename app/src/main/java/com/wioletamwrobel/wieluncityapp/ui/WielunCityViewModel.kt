@@ -109,7 +109,6 @@ class WielunCityViewModel : ViewModel() {
         for (beacon in beaconService.getScannedBeaconsMacList(context, activity)) {
             if (BeaconsDataSource.placesBeaconList.contains(beacon.mac)) {
                 foundedPlace = findPlaceFromBeacon(beacon.mac)
-                cleanScannedBeacon()
                 updateCurrentPlace(foundedPlace)
                 navigateToDetailPage()
 

@@ -2,6 +2,7 @@ package com.wioletamwrobel.wieluncityapp.data
 
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Place
+import com.wioletamwrobel.wieluncityapp.utils.PlaceActionType
 
 object PlacesDataSource {
 
@@ -14,7 +15,9 @@ object PlacesDataSource {
             R.drawable.city_hall_small,
             R.string.history,
             "geo: 51.220479, 18.572694",
-            null
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.city_square,
@@ -24,7 +27,9 @@ object PlacesDataSource {
             R.drawable.plac_legionow_small,
             R.string.entertainment,
             "geo: 51.220557, 18.570109",
-            null
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.former_castle,
@@ -34,7 +39,9 @@ object PlacesDataSource {
             R.drawable.former_castle_small,
             R.string.history,
             "geo: 51.219580, 18.572042",
-            null
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.eternal_love_statue,
@@ -44,6 +51,8 @@ object PlacesDataSource {
             R.drawable.eternal_love_statue_small,
             R.string.art,
             "geo: 51.220142, 18.572191",
+            "https://freefy.app/track/330772549/eternal-love-and-desire",
+            PlaceActionType.AUDIO,
             "BC:57:29:0E:46:78"
         ),
         Place(
@@ -54,7 +63,9 @@ object PlacesDataSource {
             R.drawable.saint_michael_church_small,
             R.string.history,
             "geo: 51.220004, 18.570964",
-            null
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.defensive_walls,
@@ -64,7 +75,9 @@ object PlacesDataSource {
             R.drawable.defensive_walls_small,
             R.string.history,
             "geo: 51.221088, 18.573351",
-            null
+            null,
+            PlaceActionType.AUDIO,
+            "BC:57:29:0E:46:7B",
         ),
         Place(
             R.string.city_park,
@@ -74,7 +87,9 @@ object PlacesDataSource {
             R.drawable.park_center_small,
             R.string.nature,
             "geo: 51.218106, 18.573711",
-            null
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.museum,
@@ -84,6 +99,8 @@ object PlacesDataSource {
             R.drawable.museum_small,
             R.string.history,
             "geo: 51.220327, 18.567308",
+            null,
+            null,
             null
         ),
         Place(
@@ -94,6 +111,8 @@ object PlacesDataSource {
             R.drawable.kaliska_street_small,
             R.string.shops,
             "geo: 51.221257, 18.564623",
+            null,
+            null,
             null
         ),
         Place(
@@ -104,6 +123,8 @@ object PlacesDataSource {
             R.drawable.kaliska_gate_small,
             R.string.history,
             "geo: 51.220935, 18.566833",
+            null,
+            null,
             null
         ),
         Place(
@@ -114,6 +135,8 @@ object PlacesDataSource {
             R.drawable.library_small,
             R.string.entertainment,
             "geo: 51.220797, 18.567925",
+            null,
+            null,
             null
         ),
         Place(
@@ -124,6 +147,8 @@ object PlacesDataSource {
             R.drawable.cinema_small,
             R.string.entertainment,
             "geo: 51.220595, 18.568488",
+            "https://kinosyrena.pl/wp-content/uploads/2024/11/15.11.2024-21.11.2024-1-scaled.jpg",
+            PlaceActionType.PAGE,
             "BC:57:29:03:77:02"
         ),
         Place(
@@ -134,7 +159,9 @@ object PlacesDataSource {
             R.drawable.park_small,
             R.string.nature,
             "geo: 51.221523, 18.554638",
-            "BC:57:29:0E:46:7B"
+            null,
+            null,
+            null,
         ),
         Place(
             R.string.jewish_cemetery,
@@ -144,7 +171,9 @@ object PlacesDataSource {
             R.drawable.cementary_small,
             R.string.history,
             "geo: 51.213356, 18.553898",
-            null
+            null,
+            null,
+            null,
         )
     )
 

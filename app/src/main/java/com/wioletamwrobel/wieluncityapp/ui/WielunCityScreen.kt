@@ -68,6 +68,7 @@ import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
+import com.wioletamwrobel.wieluncityapp.utils.PlaceActionType
 import com.wioletamwrobel.wieluncityapp.utils.PlacesContentType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -105,6 +106,9 @@ fun WielunCityApp(
                 withContext(Dispatchers.IO) {
                     delay(3000)
                     viewModel.scannerResponseWithoutButton(context, activity)
+                    withContext(Dispatchers.Main) {
+                        viewModel.cleanScannedBeacon()
+                    }
                 }
             }
         }
@@ -470,6 +474,19 @@ fun PlaceDetail(
                             })
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DetailPlaceAction(place: Place) {
+    if (place.placeAction != null) {
+        when(place.placeActionType) {
+            PlaceActionType.AUDIO -> {}
+            PlaceActionType.PAGE -> {}
+            PlaceActionType.MOVIE -> {}
+            PlaceActionType.NOTIFICATION -> {}
+            null -> {}
         }
     }
 }
