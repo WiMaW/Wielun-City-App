@@ -63,9 +63,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wioletamwrobel.wieluncityapp.R
 import com.wioletamwrobel.wieluncityapp.model.Dialog
 import com.wioletamwrobel.wieluncityapp.model.Place
+import com.wioletamwrobel.wieluncityapp.player.AudioPlayerService
 import com.wioletamwrobel.wieluncityapp.ui.WielunCityViewModel.WielunCityUiState
 import com.wioletamwrobel.wieluncityapp.ui.theme.Shapes
 import com.wioletamwrobel.wieluncityapp.utils.PlaceActionType
@@ -118,6 +121,7 @@ fun WielunCityApp(
         TopAppBar(
             onBackButtonClick = {
                 viewModel.navigateToListPage()
+                viewModel.stopAudio()
             },
             onScannerButtonClick = {
                 viewModel.startScanning(context, activity)
@@ -138,6 +142,7 @@ fun WielunCityApp(
                 onBackPressed = onBackPressed,
                 prefs = prefs,
                 context = context,
+                viewModel = viewModel
             )
         } else {
             if (uiState.value.isShowingListPage) {
@@ -169,7 +174,8 @@ fun WielunCityApp(
                         modifier = Modifier,
                         imageHeight = dimensionResource(id = R.dimen.place_detail_image_height),
                         contentScale = ContentScale.Crop,
-                        context = context
+                        context = context,
+                        viewModel = viewModel
                     )
                 }
             }
@@ -395,9 +401,16 @@ fun PlaceDetail(
     imageHeight: Dp,
     contentScale: ContentScale,
     context: Context,
+    viewModel: WielunCityViewModel,
     modifier: Modifier = Modifier
 ) {
     BackHandler { onBackPressed() }
+
+
+    if (selectedPlace.placeAction != null) {
+        DetailPlaceAction(selectedPlace, viewModel, context)
+    }
+
 
     val scrollState = rememberScrollState()
     val layoutDirection = LocalLayoutDirection.current
@@ -479,16 +492,28 @@ fun PlaceDetail(
 }
 
 @Composable
-fun DetailPlaceAction(place: Place) {
+fun DetailPlaceAction(place: Place, viewModel: WielunCityViewModel, context: Context) {
     if (place.placeAction != null) {
-        when(place.placeActionType) {
-            PlaceActionType.AUDIO -> {}
-            PlaceActionType.PAGE -> {}
-            PlaceActionType.MOVIE -> {}
+        when (place.placeActionType) {
+            PlaceActionType.AUDIO -> {
+                LaunchedEffect(key1 = true) {
+                    viewModel.startAudio(place.placeAction.toString().toInt(), context)
+                }
+            }
+            PlaceActionType.PAGE -> {
+
+            }
+            PlaceActionType.MOVIE -> {
+
+            }
             PlaceActionType.NOTIFICATION -> {}
             null -> {}
         }
     }
+}
+
+fun DetailPlaceActionAudio() {
+
 }
 
 //Function for displaying main screen - place and detail view for larger screen sizes
@@ -500,6 +525,7 @@ fun PlaceListAndDetail(
     selectedPlace: Place,
     onBackPressed: () -> Unit,
     context: Context,
+    viewModel: WielunCityViewModel,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     Row(
@@ -535,7 +561,8 @@ fun PlaceListAndDetail(
                 onBackPressed = onBackPressed,
                 imageHeight = dimensionResource(id = R.dimen.place_and_detail_image_height),
                 contentScale = ContentScale.Crop,
-                context = context
+                context = context,
+                viewModel = viewModel,
             )
         }
     }

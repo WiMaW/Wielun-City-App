@@ -27,9 +27,9 @@ object PlacesDataSource {
             R.drawable.plac_legionow_small,
             R.string.entertainment,
             "geo: 51.220557, 18.570109",
-            null,
-            null,
-            null,
+            "https://youtu.be/kw40WI_xbG0?si=6-veYjCQLZLMXy-g",
+            PlaceActionType.MOVIE,
+            "BC:57:29:0E:46:7B",
         ),
         Place(
             R.string.former_castle,
@@ -51,7 +51,7 @@ object PlacesDataSource {
             R.drawable.eternal_love_statue_small,
             R.string.art,
             "geo: 51.220142, 18.572191",
-            "https://freefy.app/track/330772549/eternal-love-and-desire",
+            R.raw.eternal_love_music,
             PlaceActionType.AUDIO,
             "BC:57:29:0E:46:78"
         ),

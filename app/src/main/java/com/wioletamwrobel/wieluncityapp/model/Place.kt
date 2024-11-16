@@ -12,7 +12,7 @@ data class Place(
     @DrawableRes val placeImageResourceSmall: Int,
     @StringRes val placeCategory: Int,
     val geolocation: String,
-    val placeAction: String?,
+    val placeAction: Any?,
     val placeActionType: PlaceActionType?,
     val beaconMac: String?
 )

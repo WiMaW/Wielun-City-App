@@ -2,6 +2,7 @@ package com.wioletamwrobel.wieluncityapp.ui
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wioletamwrobel.wieluncityapp.beaconConnection.BeaconService
@@ -9,6 +10,8 @@ import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource
 import com.wioletamwrobel.wieluncityapp.data.PlacesDataSource.placeList
 import com.wioletamwrobel.wieluncityapp.data.BeaconsDataSource
 import com.wioletamwrobel.wieluncityapp.model.Place
+import com.wioletamwrobel.wieluncityapp.player.AudioPlayerService
+import com.wioletamwrobel.wieluncityapp.player.VideoPlayerService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -132,6 +135,26 @@ class WielunCityViewModel : ViewModel() {
     fun cleanScannedBeacon() {
         beaconService.clearBeacon()
     }
+
+    //VideoPlayerService
+
+    fun startVideo(uri: Uri, context: Context) {
+        val playerService = VideoPlayerService(uri, context)
+        val player = playerService.getPlayer()
+        player.play()
+    }
+
+    //AudioPlayerService
+    private val audioPlayer = AudioPlayerService()
+
+    fun startAudio(file: Int, context: Context) {
+        audioPlayer.play(file, context)
+    }
+
+    fun stopAudio() {
+        audioPlayer.stop()
+    }
+
 
     data class WielunCityUiState(
         val placesList: List<Place> = emptyList(),
