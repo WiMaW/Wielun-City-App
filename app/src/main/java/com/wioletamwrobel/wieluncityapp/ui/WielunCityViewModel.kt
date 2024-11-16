@@ -144,6 +144,10 @@ class WielunCityViewModel : ViewModel() {
         return videoPlayerService.getPlayer(video, context)
     }
 
+    fun clearPlayer() {
+        videoPlayerService.clearPlayer()
+    }
+
     fun startMovie() {
         viewModelScope.launch {
             _uiState.update {
@@ -151,9 +155,6 @@ class WielunCityViewModel : ViewModel() {
             }
         }
     }
-
-
-
 
     //AudioPlayerService
     private val audioPlayer = AudioPlayerService()

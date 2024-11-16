@@ -105,6 +105,8 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.stopScanning()
+        viewModel.stopAudio()
+        viewModel.clearPlayer()
         viewModel.cleanScannedBeacon()
     }
 

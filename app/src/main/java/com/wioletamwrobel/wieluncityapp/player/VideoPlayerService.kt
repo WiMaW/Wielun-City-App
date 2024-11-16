@@ -32,4 +32,9 @@ class VideoPlayerService() {
         preparePlayer(mediaItem, context)
         return exoplayer
     }
+
+    fun clearPlayer() {
+        exoplayer?.release()
+        exoplayer = null
+    }
 }

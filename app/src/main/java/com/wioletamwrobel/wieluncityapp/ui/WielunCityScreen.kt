@@ -127,6 +127,7 @@ fun WielunCityApp(
             onBackButtonClick = {
                 viewModel.navigateToListPage()
                 viewModel.stopAudio()
+                viewModel.clearPlayer()
             },
             onScannerButtonClick = {
                 viewModel.startScanning(context, activity)
