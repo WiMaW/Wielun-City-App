@@ -44,9 +44,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -128,6 +130,7 @@ fun WielunCityApp(
                 viewModel.navigateToListPage()
                 viewModel.stopAudio()
                 viewModel.clearPlayer()
+                viewModel.startMovie()
             },
             onScannerButtonClick = {
                 viewModel.startScanning(context, activity)
@@ -421,6 +424,7 @@ fun PlaceDetail(
         DetailPlaceAction(
             selectedPlace,
             viewModel,
+            uiState,
             context,
         )
     }
@@ -447,23 +451,12 @@ fun PlaceDetail(
                     end = contentPadding.calculateEndPadding(layoutDirection)
                 )
             ) {
-                if (uiState.value.isMovieToPlay) {
-                    Box(modifier = Modifier.height(350.dp)) {
-                        AndroidView(factory = {
-                            PlayerView(context).apply {
-                                player = viewModel.getPlayer(selectedPlace.placeAction.toString().toInt(), context)
-                                player?.play()
-                            }
-                        }, modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                } else {
-                    PlaceDetailImage(
-                        selectedPlace = selectedPlace,
-                        modifier = Modifier.height(imageHeight),
-                        contentScale = contentScale
-                    )
-                }
+                PlaceDetailImage(
+                    selectedPlace = selectedPlace,
+                    modifier = Modifier.height(imageHeight),
+                    contentScale = contentScale
+                )
+
                 Text(
                     text = stringResource(selectedPlace.nameResource),
                     style = MaterialTheme.typography.bodyMedium,
@@ -516,10 +509,12 @@ fun PlaceDetail(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPlaceAction(
     place: Place,
     viewModel: WielunCityViewModel,
+    uiState: State<WielunCityUiState>,
     context: Context,
 ) {
 
@@ -536,8 +531,29 @@ fun DetailPlaceAction(
 
             PlaceActionType.PAGE -> {}
             PlaceActionType.MOVIE -> {
-                viewModel.startMovie()
-
+                if (uiState.value.isMovieToPlay) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            viewModel.stopMovie()
+                            viewModel.navigateToDetailPage()
+                        },
+                        sheetState = rememberModalBottomSheetState()
+                    ) {
+                        AndroidView(
+                            factory = {
+                                PlayerView(context).apply {
+                                    player = viewModel.getPlayer(
+                                        place.placeAction.toString().toInt(),
+                                        context
+                                    )
+                                    //   player?.play()
+                                }
+                            }, modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(16 / 9f)
+                        )
+                    }
+                }
             }
 
             PlaceActionType.NOTIFICATION -> {}

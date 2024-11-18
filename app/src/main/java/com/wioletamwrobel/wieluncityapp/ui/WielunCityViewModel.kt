@@ -156,6 +156,14 @@ class WielunCityViewModel : ViewModel() {
         }
     }
 
+    fun stopMovie() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isMovieToPlay = false)
+            }
+        }
+    }
+
     //AudioPlayerService
     private val audioPlayer = AudioPlayerService()
 
@@ -175,7 +183,7 @@ class WielunCityViewModel : ViewModel() {
         val isScannerButtonClicked: Boolean = false,
         val isScannerLoading: Boolean = false,
         val isBeaconScanned: Boolean = false,
-        val isMovieToPlay: Boolean = false,
+        val isMovieToPlay: Boolean = true,
     )
 }
 
