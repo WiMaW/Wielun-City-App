@@ -12,10 +12,10 @@ val light_outline = Color(0xFFE9B824)
 val light_outlineVariant = Color(0xFFE9B824)
 val light_tertiary = Color(0xFF219C90)
 
-val dark_primary = Color(0xFF4D3C77)
-val dark_primaryContainer = Color(0xFF219C90)
-val dark_onPrimaryContainer = Color(0xFF4D3C77)
-val dark_secondary = Color(0xFFE9B824)
+val dark_primary = Color(0xFFE9B824)
+val dark_primaryContainer = Color.White
+val dark_onPrimaryContainer = Color(0xFFE9B824)
+val dark_secondary = Color(0xFF219C90)
 val dark_background = Color(0xFFFFFBFF)
 val dark_surface = Color.Black
 val dark_outline = Color(0xFF4D3C77)

@@ -74,6 +74,12 @@
     <string name="cinema">Kino/Teatr Syrena</string>
     <string name="cinema_description">Kino zostało zbudowane w latach 1959–1962. Budynek mógł pomieścić 578 widzów. W latach 90-tych kino przestało działać. W 2010 roku rozpoczęto generalny remont, a w październiku 2017 roku kino zostało ponownie otwarte. W kinie działają dwie sale - duża oraz kamerlana (wyposażona w wygodne kanapy). Odbywają się tu seanse filmowe, koncerty, wystawiane są sztuki teatralne.</string>
     <string name="cinema_localization">ul. Narutowicza 2</string>
+    <string name="alert_dialog_cinema_title">Może bilet?</string>
+    <string name="alert_dialog_cinema_text">upewnij się że twoje urządzenie ma połączenie z internetem</string>
+    <string name="alert_dialog_cinema_confirmButton">Tak, proszę</string>
+    <string name="alert_dialog_cinema_dismissButton">Nie, dziękuje</string>
+    <string name="alert_dialog_cinema_info_icon_description">info_icon</string>
+
 
     <string name="park">Park im. Mieczysława Kałuży</string>
     <string name="park_description">Park położony jest przy granicy miasta. Na jego terenie znajduje się ogród botaniczny, stadion miejski, skatepark, dwa boiska do piłki nożnej, plac zabaw i restauracja. W pobliżu biegnie trasa rowerowa szlakiem dawnej kolejki. Wspaniałe miejsce do spędzenia wolnego czasu na świeżym powietrzy z całą rodziną. </string>

@@ -74,6 +74,11 @@
     <string name="cinema">Cinema/Theater Syrena</string>
     <string name="cinema_description">The cinema was built in 1959–1962. There was a space for 578 people. In the 90’s the cinema stopped operating. A general renovation was carried out in 2010, and in October 2017, the cinema reopened.There are two cinema halls in the building - a large one and a chamber room (equipped with comfortable sofas). Film screenings, concerts and theater plays take place here.</string>
     <string name="cinema_localization">2 Narutowicz Street</string>
+    <string name="alert_dialog_cinema_title">Ticket, maybe?</string>
+    <string name="alert_dialog_cinema_text">make sure your device has internet connection</string>
+    <string name="alert_dialog_cinema_confirmButton">Yes, please</string>
+    <string name="alert_dialog_cinema_dismissButton">No, thanks</string>
+    <string name="alert_dialog_cinema_info_icon_description">info_icon</string>
 
     <string name="park">City Park \'Mieczysław Kaluza\'</string>
     <string name="park_description">The park is located on the border of the city. Within it there is a botanical garden, a city stadium, a skate park, two football fields, a playground and a restaurant. There is a bicycle route nearby, following the former railway route. A great place to spend free time outdoors with the whole family.</string>
@@ -93,5 +98,6 @@
     <string name="search_dialog_text">make sure that your device has bluetooth connection</string>
     <string name="confirm_button_search">Search</string>
     <string name="confirm_button_refresh">Refresh</string>
+
 
 </resources>

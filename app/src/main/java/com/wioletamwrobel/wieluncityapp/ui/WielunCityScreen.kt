@@ -114,7 +114,7 @@ fun WielunCityApp(
         scope.launch {
             while (true) {
                 withContext(Dispatchers.IO) {
-                    delay(3000)
+                    delay(2000)
                     viewModel.scannerResponseWithoutButton(context, activity)
                     withContext(Dispatchers.Main) {
                         viewModel.cleanScannedBeacon()
@@ -563,13 +563,13 @@ fun DetailPlaceAction(
                         icon = {
                             Icon(
                                 Icons.Filled.Info,
-                                "info_icon",
+                                stringResource(R.string.alert_dialog_cinema_info_icon_description),
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(35.dp)
                             )
                         },
-                        title = "A może bilecik?",
-                        dialogText = "upewnij się, że masz dostęp do internetu",
+                        title = stringResource(R.string.alert_dialog_cinema_title),
+                        dialogText = stringResource(R.string.alert_dialog_cinema_text),
                         onConfirmButtonClicked = {
                             intentActionView.apply {
                                 data = Uri.parse(place.placeAction.toString())
@@ -577,9 +577,9 @@ fun DetailPlaceAction(
                             }
                             showDialog = false
                         },
-                        onConfirmButtonText = "Prowadź",
+                        onConfirmButtonText = stringResource(R.string.alert_dialog_cinema_confirmButton),
                         onDismissButtonClicked = { showDialog = false },
-                        onDismissButtonText = "Nie, dziękuje"
+                        onDismissButtonText = stringResource(R.string.alert_dialog_cinema_dismissButton)
                     )
                 }
             }
