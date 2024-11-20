@@ -1,15 +1,9 @@
 package com.wioletamwrobel.wieluncityapp.player
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import java.lang.Exception
 
 class VideoPlayerService() {
